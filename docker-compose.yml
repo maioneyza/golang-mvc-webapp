@@ -21,9 +21,9 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: 9_{hdKc]K<sS'7SL
-  go-docker-image:
-    build: ./
-    ports:
-      - '80:80'
-    volumes:
-      - ./:/app
+  # go-docker-image:
+  #   build: ./
+  #   ports:
+  #     - '80:80'
+  #   volumes:
+  #     - ./:/app
