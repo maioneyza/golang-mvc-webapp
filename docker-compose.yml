@@ -1,5 +1,9 @@
 version: "3"
 services:
+  base-image:
+    image: base-image
+    build: ./build/base-image
+
   mongo:
     image: mongo
     restart: always
@@ -7,9 +11,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 9_{hdKc]K<sS'7SL
       MONGO_INITDB_DATABASE: test
-      MONGODB_USER: "anuchit"
-      MONGODB_DATABASE: "test"
-      MONGODB_PASS: "$$test$$"
     volumes: 
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       
@@ -23,14 +24,16 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: 9_{hdKc]K<sS'7SL
-  go-docker-image:
-    build: 
-      context: ./
-      dockerfile: Dockerfile
+  backend-server:
+    image: base-image
     depends_on:
         - "mongo"
         - "mongo-express"
+    command: CompileDaemon --build="go build -o /go/bin/main main.go" -command="/go/bin/main"
     ports:
       - '80:80'
     volumes:
-      - ./:/go/src/app
+      - ./:/go/src/gitlab.com/karidoe/lab-golang
+    working_dir: /go/src/gitlab.com/karidoe/lab-golang
+    links:
+      - mongo

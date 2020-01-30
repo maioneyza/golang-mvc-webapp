@@ -1,24 +1,20 @@
 package main
 
 import (
-	"fmt"
-	// "github.com/gorilla/mux"
-	// "net/http"
-	// "lab-golang-api/controllers/products"
+	"github.com/gorilla/mux"
+	"net/http"
+	ProductsController "lab-golang-api/controllers/products"
+	UsersController "lab-golang-api/controllers/users"
+	"log"
 )
 
 func main () {
-	fmt.Println("Hello World!")
-	// if err := http.ListenAndServe(":8000", r); err != nil {
-	// 	log.Fatal("Serving error.")
-	// }
+	r := mux.NewRouter()
+
+	ProductsController.BindRoutes()
+	UsersController.BindRoutes()
+	
+	if err := http.ListenAndServe(":80", r); err != nil {
+		log.Fatal("Serving error.", err)
+	}
 }
-
-// func getRouters() *mux.Router {
-// 	r := mux.NewRouter()
-
-// 	ProductsController.RegisterRouters(r)
-// 	UsersController.RegisterRouters(r)
-
-// 	return r
-// }
