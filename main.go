@@ -11,8 +11,8 @@ import (
 func main () {
 	r := mux.NewRouter()
 
-	ProductsController.BindRoutes()
-	UsersController.BindRoutes()
+	ProductsController.BindRoutes(r)
+	UsersController.BindRoutes(r)
 	
 	if err := http.ListenAndServe(":80", r); err != nil {
 		log.Fatal("Serving error.", err)
