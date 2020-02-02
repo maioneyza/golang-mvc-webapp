@@ -1,4 +1,4 @@
-module lab-golang-api
+module golang-mvc-webapp
 
 go 1.13
 

@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"net/http"
-	ProductsController "lab-golang-api/controllers/products"
-	UsersController "lab-golang-api/controllers/users"
+	ProductsController "golang-mvc-webapp/controllers/products"
+	UsersController "golang-mvc-webapp/controllers/users"
 	"log"
 )
 

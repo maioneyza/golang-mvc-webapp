@@ -2,8 +2,8 @@ package products
 
 import(
 	"fmt"
-	"lab-golang-api/db"
-	"lab-golang-api/models"
+	"golang-mvc-webapp/db"
+	"golang-mvc-webapp/models"
 	"net/http"
 )
 
