@@ -7,8 +7,10 @@ import (
 	"log"
 )
 
+type Mongodb struct {}
+
 var (
-	MongodbConnection *mgo.Session
+	session *mgo.Session
 	err error
 )
 
@@ -21,17 +23,19 @@ func init() {
 		config.Getenv("APP_MONGO_PASSWORD"), 
 		config.Getenv("APP_MONGO_DATABASE"),
 	)
-
-	fmt.Println(dsn)
-
-	MongodbConnection, err = mgo.Dial(dsn)
+	
+	session, err = mgo.Dial(dsn)
 
 	if (err != nil) {
 		log.Fatal("Cannot Connect Mongodb")
 	}
 }
 
-func GetMongodbSession() *mgo.Session {
-	return MongodbConnection.Copy()
+func (c Mongodb) New() *Mongodb {
+	return c
 }
 
+func (c *Mongodb) connection() *mgo.Session {
+	 s := session.Copy()
+	 return s
+}

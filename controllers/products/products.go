@@ -23,13 +23,16 @@ func indexAction(w http.ResponseWriter, r *http.Request) {
 	productModel := productsModel()
 	defer productModel.CloseSession()
 
-	var item models.ProductItem
-	
-	json.NewDecoder(r.Body).Decode(&item)
-	productModel.Create(item);
+	var results []models.ProductItem
+	results, err := productModel.All();
 
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
-	json.NewEncoder(w).Encode(item)
+
+	if(err != nil) {
+		json.NewEncoder(w).Encode(err)
+	}
+	
+	json.NewEncoder(w).Encode(results)
 }
 
 func productsModel() *models.Products {
