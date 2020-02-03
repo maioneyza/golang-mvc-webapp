@@ -7,5 +7,4 @@ import (
 func BindRoutes(r *mux.Router) {
 	sr := r.PathPrefix("/users").Subrouter()
 	sr.HandleFunc("", userIndexAction)
-	sr.HandleFunc("/{id}/info", userInfoAction)
 }

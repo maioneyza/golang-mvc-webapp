@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"gopkg.in/mgo.v2"
+	"golang-mvc-webapp/config"
 	"log"
 )
 
@@ -13,7 +14,17 @@ var (
 
 func init() {
 	fmt.Println("Connecting DB....")
-	MongodbConnection, err = mgo.Dial("mongodb://mongo")
+
+	dsn := fmt.Sprintf(
+		"mongodb://%s:%s@mongo/%s", 
+		config.Getenv("APP_MONGO_USERNAME"), 
+		config.Getenv("APP_MONGO_PASSWORD"), 
+		config.Getenv("APP_MONGO_DATABASE"),
+	)
+
+	fmt.Println(dsn)
+
+	MongodbConnection, err = mgo.Dial(dsn)
 
 	if (err != nil) {
 		log.Fatal("Cannot Connect Mongodb")
@@ -23,3 +34,4 @@ func init() {
 func GetMongodbSession() *mgo.Session {
 	return MongodbConnection.Copy()
 }
+

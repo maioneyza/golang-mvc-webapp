@@ -2,7 +2,7 @@ package models
 
 import(
 	"gopkg.in/mgo.v2"
-	"log"
+	"golang-mvc-webapp/config"
 )
 
 type Products struct {
@@ -10,32 +10,24 @@ type Products struct {
 }
 
 type ProductItem struct {
-	Sku string
-	Name string
-	Price float32
+	Sku string `json:"sku"`
+	Name string `json:"name":`
+	Price float32 `json:"price"`
 }
 
-// type ProductItems []ProductItem
+func (c *Products) Create(p ProductItem) error {
 
-func (c *Products) Create() bool {
-	db := c.Connection.DB("test")
-	t := db.Login("anuchit", "$$jak$$")
-
-	log.Println(t)
-	
+	db := c.Connection.DB(config.Getenv("APP_MONGO_DATABASE"))
 	productsCollection := db.C("products")
-	
-	err := productsCollection.Insert(
-		&ProductItem{"123", "สบู่่ถ่านไม้ไผ่ใข้ขัดตัว 1", 29.53},
-		&ProductItem{"124", "สบู่่ถ่านไม้ไผ่ใข้ขัดตัว 2", 20.25},
-		&ProductItem{"125", "สบู่่ถ่านไม้ไผ่ใข้ขัดตัว 3", 27.55},
-	)
+	err := productsCollection.Insert(p)
+	return err
+}
 
-	if (err != nil) {
-		log.Fatal(err)
-	}
-
-	return (err == nil)
+func (c *Products) All() ([]ProductItem, error) {
+	var results []ProductItem
+	db := c.Connection.DB(config.Getenv("APP_MONGO_DATABASE"))
+	err := db.C("client").Find(nil).All(&results)
+	return results, err
 }
 
 func (c *Products) CloseSession() {
