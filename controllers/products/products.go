@@ -1,7 +1,6 @@
 package products
 
 import(
-	"fmt"
 	"golang-mvc-webapp/db"
 	"golang-mvc-webapp/models"
 	"encoding/json"
@@ -10,7 +9,7 @@ import(
 
 func createAction(w http.ResponseWriter, r *http.Request) {
 	productModel := productsModel()
-	defer productsModel.CloseSession()
+	defer productModel.CloseSession()
 
 	var item models.ProductItem
 	json.NewDecoder(r.Body).Decode(&item)
@@ -22,7 +21,7 @@ func createAction(w http.ResponseWriter, r *http.Request) {
 
 func indexAction(w http.ResponseWriter, r *http.Request) {
 	productModel := productsModel()
-	defer productsModel.CloseSession()
+	defer productModel.CloseSession()
 
 	var item models.ProductItem
 	
