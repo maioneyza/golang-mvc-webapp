@@ -15,7 +15,7 @@ func main() {
 
 	ProductsController.BindRoutes(r)
 	UsersController.BindRoutes(r)
-
+	//fix port
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatal("Serving error.", err)
 	}
