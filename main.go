@@ -1,22 +1,22 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/gorilla/mux"
-	"net/http"
-	"log"
+	"github.com/joho/godotenv"
 	ProductsController "golang-mvc-webapp/controllers/products"
 	UsersController "golang-mvc-webapp/controllers/users"
+	"log"
+	"net/http"
 )
 
-func main () {
+func main() {
 	loadEnv()
 	r := mux.NewRouter()
 
 	ProductsController.BindRoutes(r)
 	UsersController.BindRoutes(r)
-	
-	if err := http.ListenAndServe(":80", r); err != nil {
+
+	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatal("Serving error.", err)
 	}
 }

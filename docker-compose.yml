@@ -31,7 +31,7 @@ services:
         - "mongo-express"
     command: CompileDaemon --build="go build -o /go/bin/main main.go" -command="/go/bin/main"
     ports:
-      - '80:80'
+      - '8080:8080'
     volumes:
       - ./:/go/src/gitlab.com/karidoe/lab-golang
     working_dir: /go/src/gitlab.com/karidoe/lab-golang
