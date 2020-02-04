@@ -1,40 +1,49 @@
 package products
 
-import(
-	"golang-mvc-webapp/db"
-	"golang-mvc-webapp/models"
+import (
 	"encoding/json"
+	"golang-mvc-webapp/models"
 	"net/http"
 )
 
-func createAction(w http.ResponseWriter, r *http.Request) {
-	productModel := productsModel()
-	defer productModel.CloseSession()
+type Response struct {
+	Success bool   `json:"success"`
+	Message string `json:"message,omitempty"`
+	Data    []models.ProductItem `json: data, omitempty"`
+}
 
+var ProductModel *models.ProductModel = models.GetProductModel()
+
+func createAction(w http.ResponseWriter, r *http.Request) {
 	var item models.ProductItem
-	json.NewDecoder(r.Body).Decode(&item)
-	productModel.Create(item);
+	_ = json.NewDecoder(r.Body).Decode(&item)
+
+	response := &Response{
+		Success: true,
+		Message: "Created Successfully!!",
+		Data: []models.ProductItem{item},
+	}
+	if err := ProductModel.Create(item); err != nil {
+		response.Success = false
+		response.Message = err.Error()
+	}
 
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
-	json.NewEncoder(w).Encode(item)
+	json.NewEncoder(w).Encode(response)
 }
 
 func indexAction(w http.ResponseWriter, r *http.Request) {
-	productModel := productsModel()
-	defer productModel.CloseSession()
-
 	var results []models.ProductItem
-	results, err := productModel.All();
-
+	results, err := ProductModel.All()
+	response := &Response{}
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 
-	if(err != nil) {
-		json.NewEncoder(w).Encode(err)
+	if err != nil {
+		response.Message = err.Error()
 	}
-	
-	json.NewEncoder(w).Encode(results)
-}
 
-func productsModel() *models.Products {
-	return &models.Products{db.MongodbConnection.Copy()}
+	response.Success = true
+	response.Data = results
+
+	_ = json.NewEncoder(w).Encode(results)
 }

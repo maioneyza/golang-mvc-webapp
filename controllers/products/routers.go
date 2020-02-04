@@ -8,5 +8,5 @@ func BindRoutes(r *mux.Router)  {
 	r.HandleFunc("/products", indexAction).Methods("GET")
 	
 	sr := r.PathPrefix("/products").Subrouter()
-	sr.HandleFunc("/create", createAction).Methods("POST")
+	sr.HandleFunc("", createAction).Methods("POST")
 }

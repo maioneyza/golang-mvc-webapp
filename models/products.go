@@ -1,34 +1,42 @@
 package models
 
 import(
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"golang-mvc-webapp/config"
 	"golang-mvc-webapp/db"
 )
 
-type ProductModel struct {
-	Connection *mgo.Session
-}
+type ProductModel struct {}
 
 type ProductItem struct {
 	Sku string `json:"sku"`
-	Name string `json:"name":`
-	Price float32 `json:"price"`
+	Name string `json:"name"`
+	Price float64 `json:"price"`
 }
 
-func (class *ProductModel) Create(p ProductItem) error {
+var (
+	DB *db.Mongodb
+	dbName = config.Getenv("APP_MONGO_DATABASE")
+)
 
-	db := class.database().C("products")
-	productsCollection.Close()
-	err := productsCollection.Insert(p)
+func GetProductModel() *ProductModel {
+	return &ProductModel{}
+}
 
+func (c *ProductModel) Create(p ProductItem) error {
+	session := db.GetMongodb().GetSession()
+	defer session.Close()
+
+	err := session.DB(dbName).C("products").Insert(p)
 	return err
 }
 
 func (c *ProductModel) All() ([]ProductItem, error) {
-	var results []ProductItem
-	err := c.database().C("products").Find(bson.M{}).All(&results)
 
+	session := db.GetMongodb().GetSession()
+	defer session.Close()
+
+	var results []ProductItem
+	err := session.DB(dbName).C("products").Find(bson.M{}).All(&results)
 	return results, err
 }

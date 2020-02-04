@@ -7,7 +7,9 @@ import (
 	"log"
 )
 
-type Mongodb struct {}
+type Mongodb struct {
+	session *mgo.Session
+}
 
 var (
 	session *mgo.Session
@@ -31,11 +33,14 @@ func init() {
 	}
 }
 
-func (c Mongodb) New() *Mongodb {
-	return c
+func GetMongodb() *Mongodb {
+	return &Mongodb{session.Copy()}
 }
 
-func (c *Mongodb) connection() *mgo.Session {
-	 s := session.Copy()
-	 return s
+func (c *Mongodb) GetSession() *mgo.Session {
+	return c.session
+}
+
+func (c *Mongodb) CloseSession() {
+	c.session.Close()
 }
